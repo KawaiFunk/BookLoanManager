@@ -1,4 +1,6 @@
-﻿namespace LibraryManagementSystem.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LibraryManagementSystem.Models.DTOs
 {
     public class MemberDTO
     {
