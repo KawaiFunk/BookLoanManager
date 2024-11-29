@@ -39,7 +39,9 @@
                 <td>
                     <a class="btn btn-warning" asp-controller="Members" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                     <a class="btn btn-info" asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    <form asp-controller="Members" asp-action="Delete" asp-route-id="@item.ID" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 </td>
             </tr>
         }

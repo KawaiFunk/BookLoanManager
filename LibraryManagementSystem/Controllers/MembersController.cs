@@ -91,5 +91,21 @@ namespace LibraryManagementSystem.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpPost("Delete/{ID}")]
+        public async Task<IActionResult> Delete(int ID)
+        {
+            Member member = await _context.Members.FindAsync(ID);
+
+            if (member == null)
+            {
+                return NotFound();
+            }
+
+            _context.Members.Remove(member);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
