@@ -1,24 +1,24 @@
-﻿@model IEnumerable<LibraryManagementSystem.Models.Entities.Member>
+﻿@model IEnumerable<LibraryManagementSystem.Models.Entities.BorrowingRecord>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Member records";
 }
 
-<h2>Index page</h2>
+<h2>Member records</h2>
 <p>
-    <a type="button" class="btn btn-primary" asp-controller="Members" asp-action="Create">Add new member</a>
+    <a type="button" class="btn btn-primary" asp-controller="Borrow" asp-action="Create" asp-route-id="@ViewBag.MemberID">Add new record</a>
 </p>
 
 <table class="table table-hover">
     <thead>
         <tr class="table-active">
             <th scope="col">
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.Book.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.BorrowDate)
             </th scope="col">
             <th scope="col">
-                @Html.DisplayNameFor(model => model.Birthday)
+                @Html.DisplayNameFor(model => model.IsReturned)
             </th>
             <th></th>
         </tr>
@@ -28,21 +28,21 @@
         {
             <tr class="table-light">
                 <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
+                    @Html.DisplayFor(modelItem => item.Book.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
+                    @item.BorrowDate.ToString("dd-MM-yyyy")
                 </td>
                 <td>
-                    @item.Birthday.ToString("dd-MM-yyyy")
+                    @Html.DisplayFor(modelItem => item.IsReturned)
                 </td>
-                <td>
+                @* <td>
                     <a class="btn btn-warning" asp-controller="Members" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a class="btn btn-info" asp-controller="Borrow" asp-action="Index" asp-route-id="@item.ID">Records</a> |
+                    <a class="btn btn-info" asp-controller="Borrow" asp-action="Index" asp-route-id="@item.ID">Details</a> |
                     <form asp-controller="Members" asp-action="Delete" asp-route-id="@item.ID" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
-                </td>
+                </td> *@
             </tr>
         }
     </tbody>
