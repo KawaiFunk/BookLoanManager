@@ -25,7 +25,10 @@ namespace LibraryManagementSystem.Migrations
             modelBuilder.Entity("LibraryManagementSystem.Models.Entities.Book", b =>
                 {
                     b.Property<int>("BookID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookID"));
 
                     b.Property<string>("Author")
                         .IsRequired()

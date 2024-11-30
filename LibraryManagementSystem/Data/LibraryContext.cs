@@ -18,6 +18,7 @@ namespace LibraryManagementSystem.Data
             modelBuilder.Entity<Book>().ToTable("Book");
             modelBuilder.Entity<Member>().ToTable("Member");
             modelBuilder.Entity<BorrowingRecord>().ToTable("BorrowingRecord");
+            modelBuilder.Entity<Book>().Property(b => b.BookID).ValueGeneratedOnAdd();
         }
     }
 }

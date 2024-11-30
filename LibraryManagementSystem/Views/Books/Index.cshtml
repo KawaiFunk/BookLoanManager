@@ -1,0 +1,55 @@
+﻿@model IEnumerable<LibraryManagementSystem.Models.Entities.Book>
+@{
+    ViewData["Title"] = "Books";
+}
+
+<h2>Registered Books</h2>
+<p>
+    <a type="button" class="btn btn-primary" asp-controller="Books" asp-action="RegisterBook">Register new book</a>
+</p>
+
+<table class="table table-hover">
+    <thead>
+        <tr class="table-active">
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th scope="col">
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Publisher)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.PublishYear)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="table-light">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Publisher)
+                </td>
+                <td>
+                    @item.PublishYear.ToString("dd-MM-yyyy")
+                </td>
+                <td>
+                    <a class="btn btn-warning" asp-controller="Books" asp-action="EditBook" asp-route-id="@item.BookID">Edit</a> |
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.BookID">Details</a> |
+                    <form asp-controller="Books" asp-action="DeleteBook" asp-route-id="@item.BookID" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
