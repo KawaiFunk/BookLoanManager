@@ -1,0 +1,48 @@
+﻿@model IEnumerable<LibraryManagementSystem.Models.Entities.BorrowingRecord>
+@{
+    ViewData["Title"] = "Member history";
+}
+
+<h2>Member History</h2>
+<p>
+    <a type="button" class="btn btn-primary" asp-controller="Borrow" asp-action="Index" asp-route-id="@ViewBag.MemberID">Back</a>
+</p>
+
+<table class="table table-hover">
+    <thead>
+        <tr class="table-active">
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Book.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BorrowDate)
+            </th scope="col">
+            <th>
+                @Html.DisplayNameFor(model => model.IsReturned)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+                <tr class="table-light">
+                    <td>
+                    @Html.DisplayFor(modelItem => item.Book.Title)
+                    </td>
+                    <td>
+                    @item.BorrowDate.ToString("dd-MM-yyyy")
+                    </td>
+                    <td>
+                        @if (item.IsReturned)
+                    {
+                        <span class="text-success">Returned</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Not returned</span>
+                    }
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>

@@ -22,6 +22,17 @@ namespace LibraryManagementSystem.Controllers
             var records = await _context.BorrowingRecords
                 .Include(r => r.Book)
                 .Where(r => r.MemberID == id)
+                .Where(r => r.IsReturned == false)
+                .ToListAsync();
+            return View(records);
+        }
+
+        public async Task<IActionResult> History(int id)
+        {
+            ViewBag.MemberID = id;
+            var records = await _context.BorrowingRecords
+                .Include(r => r.Book)
+                .Where(r => r.MemberID == id)
                 .ToListAsync();
             return View(records);
         }
@@ -89,5 +100,20 @@ namespace LibraryManagementSystem.Controllers
             return Json(new { title = book.Title });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Returned(int ID)
+        {
+            var record = await _context.BorrowingRecords.FindAsync(ID);
+
+            if(record == null)
+            {
+                return NotFound();
+            }
+
+            record.IsReturned = true;
+            _context.SaveChangesAsync();
+            return RedirectToAction("Index", "Borrow", new { id = record.MemberID });
+        }
     }
 }

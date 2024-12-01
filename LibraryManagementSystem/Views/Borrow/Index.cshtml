@@ -6,6 +6,7 @@
 <h2>Member records</h2>
 <p>
     <a type="button" class="btn btn-primary" asp-controller="Borrow" asp-action="Create" asp-route-id="@ViewBag.MemberID">Add new record</a>
+    <a type="button" class="btn btn-primary" asp-controller="Borrow" asp-action="History" asp-route-id="@ViewBag.MemberID">View History</a>
 </p>
 
 <table class="table table-hover">
@@ -17,10 +18,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.BorrowDate)
             </th scope="col">
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.IsReturned)
+            <th>
+                Action
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -34,15 +34,10 @@
                     @item.BorrowDate.ToString("dd-MM-yyyy")
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsReturned)
-                </td>
-                @* <td>
-                    <a class="btn btn-warning" asp-controller="Members" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a class="btn btn-info" asp-controller="Borrow" asp-action="Index" asp-route-id="@item.ID">Details</a> |
-                    <form asp-controller="Members" asp-action="Delete" asp-route-id="@item.ID" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                    <form asp-controller="Borrow" asp-action="Returned" asp-route-id="@item.BorrowingRecordID" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-warning">Mark as returned</button>
                     </form>
-                </td> *@
+                </td>
             </tr>
         }
     </tbody>
