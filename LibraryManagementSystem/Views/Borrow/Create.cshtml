@@ -3,46 +3,20 @@
 <h2>Create Borrowing Record</h2>
 
 <form asp-action="Create" method="post">
-    <input type="hidden" asp-for="MemberID" />
+    <input type="hidden" asp-for="BookID" value="@Model.BookID" />
+
+    <input type="hidden" asp-for="BorrowDate" value="@DateTime.Now" />
 
     <div class="form-group">
-        <label asp-for="BookID" class="control-label"></label>
-        <input asp-for="BookID" class="form-control" id="bookIdInput" />
-        <span id="bookTitle" class="text-info"></span>
-        <span id="bookError" class="text-danger"></span>
+        <label class="control-label">Book Title</label>
+        <input class="form-control" readonly value="@Model.Book.Title" />
     </div>
 
     <div class="form-group">
-        <label asp-for="BorrowDate" class="control-label"></label>
-        <input asp-for="BorrowDate" class="form-control" readonly />
+        <label asp-for="MemberID" class="control-label">Member ID</label>
+        <input asp-for="MemberID" class="form-control" placeholder="Enter Member ID" />
+        <span id="memberError" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="submit" class="btn btn-primary">Create Borrowing Record</button>
 </form>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#bookIdInput").on("blur", function () {
-            const bookId = $(this).val();
-            if (bookId) {
-                $.ajax({
-                    url: '/Borrow/GetBookTitle',
-                    type: 'GET',
-                    data: { bookId: bookId },
-                    success: function (response) {
-                        $("#bookTitle").text(`Title: ${response.title}`);
-                        $("#bookError").text("");
-                    },
-                    error: function () {
-                        $("#bookTitle").text("");
-                        $("#bookError").text("Book not found.");
-                    }
-                });
-            } else {
-                $("#bookTitle").text("");
-                $("#bookError").text("");
-            }
-        });
-    });
-</script>

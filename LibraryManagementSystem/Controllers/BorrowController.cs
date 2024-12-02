@@ -37,59 +37,65 @@ namespace LibraryManagementSystem.Controllers
             return View(records);
         }
 
+        [HttpGet]
         public IActionResult Create(int id)
         {
+            var book = _context.Books.FirstOrDefault(b => b.BookID == id);
+            if (book == null)
+            {
+                return NotFound("Book not found");
+            }
+
             var record = new BorrowingRecord
             {
-                MemberID = id,
+                BookID = id,
+                Book = book,
                 BorrowDate = DateTime.Now
             };
+
             return View(record);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(BorrowingRecordDTO recordDTO)
+        public async Task<IActionResult> Create(BorrowingRecordDTO record)
         {
             if (!ModelState.IsValid)
             {
-                var record = new BorrowingRecord
-                {
-                    MemberID = recordDTO.MemberID,
-                    BorrowDate = DateTime.Now
-                };
-                ViewBag.Books = new SelectList(_context.Books, "BookID", "Title");
-                return View(record);
+                return View(record.BookID);
             }
 
-            //Check if book exists
-            if (!_context.Books.Any(b => b.BookID == recordDTO.BookID))
+            var member = await _context.Members.FindAsync(record.MemberID);
+            if (member == null)
             {
-                ModelState.AddModelError("BookID", "Book not available");
-                var record = new BorrowingRecord
-                {
-                    MemberID = recordDTO.MemberID,
-                    BorrowDate = DateTime.Now
-                };
-                ViewBag.Books = new SelectList(_context.Books, "BookID", "Title");
+                ModelState.AddModelError("MemberID", "Member not found");
                 return View(record);
             }
 
-            // Save the record
+            var book = await _context.Books.FindAsync(record.BookID);
+            if (book == null || !book.IsAvailable)
+            {
+                ModelState.AddModelError("BookID", "Book is not available");
+                return View(record);
+            }
+
             var newRecord = new BorrowingRecord
             {
-                BookID = recordDTO.BookID,
-                MemberID = recordDTO.MemberID,
+                BookID = record.BookID,
+                MemberID = record.MemberID,
                 BorrowDate = DateTime.Now,
                 IsReturned = false
             };
 
-            var book = await _context.Books.FindAsync(recordDTO.BookID);
             book.IsAvailable = false;
+
             _context.BorrowingRecords.Add(newRecord);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Borrow", new { id = newRecord.MemberID });
+
+            return RedirectToAction("Index", "Borrow", new { id = record.MemberID });
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetBookTitle(int bookId)

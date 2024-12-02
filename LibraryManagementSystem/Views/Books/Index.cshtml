@@ -70,7 +70,15 @@
                     <a class="btn btn-warning" asp-controller="Books" asp-action="EditBook" asp-route-id="@item.BookID">Edit</a> |
                     <form asp-controller="Books" asp-action="DeleteBook" asp-route-id="@item.BookID" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+                    </form> |
+                    @if (item.IsAvailable)
+                    {
+                        <a class="btn btn-primary" asp-controller="Borrow" asp-action="Create" asp-route-id="@item.BookID">Assign Book</a>
+                    }
+                    else
+                    {
+                        <a type="button" class="btn btn-primary disabled">Assign Book</a>
+                    }
                 </td>
             </tr>
         }

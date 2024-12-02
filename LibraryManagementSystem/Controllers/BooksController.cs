@@ -2,6 +2,7 @@
 using LibraryManagementSystem.Models.DTOs;
 using LibraryManagementSystem.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -19,7 +20,9 @@ namespace LibraryManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var books = await _context.Books.ToListAsync();
+            var books = await _context.Books
+                .OrderByDescending(r => r.IsAvailable)
+                .ToListAsync();
             return View(books);
         }
 
@@ -89,6 +92,7 @@ namespace LibraryManagementSystem.Controllers
                 .Where(b => b.Title.Contains(searchString) ||
                             b.Author.Contains(searchString) ||
                             b.Publisher.Contains(searchString))
+                .OrderByDescending(r => r.IsAvailable)
                 .ToList();
 
             return View("Index", books);
