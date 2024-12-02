@@ -80,7 +80,7 @@ namespace LibraryManagementSystem.Controllers
 
             if (member == null)
             {
-                return NotFound();
+                return View();
             }
 
             member.FirstName = memberDTO.FirstName;

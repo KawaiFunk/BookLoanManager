@@ -16,6 +16,8 @@ namespace LibraryManagementSystem.Models.Entities
         public string Publisher { get; set; }
         [Required]
         public DateTime PublishYear { get; set; }
+        [Required]
+        public bool IsAvailable { get; set; } = true;
 
         public ICollection<BorrowingRecord> BorrowingRecords { get; set; }
     }

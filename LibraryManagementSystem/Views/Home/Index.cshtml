@@ -16,7 +16,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.LastName)
-            </th scope="col">
+            </th>
             <th scope="col">
                 @Html.DisplayNameFor(model => model.Birthday)
             </th>
@@ -39,11 +39,54 @@
                 <td>
                     <a class="btn btn-warning" asp-controller="Members" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                     <a class="btn btn-info" asp-controller="Borrow" asp-action="Index" asp-route-id="@item.ID">Records</a> |
-                    <form asp-controller="Members" asp-action="Delete" asp-route-id="@item.ID" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                            data-member-id="@item.ID" data-member-name="@item.FirstName @item.LastName">
+                        Delete
+                    </button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title text-white" id="confirmDeleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="memberName"></strong>? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteMemberForm" method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Attach event listener to populate the modal dynamically
+    document.addEventListener('DOMContentLoaded', () => {
+        const deleteModal = document.getElementById('confirmDeleteModal');
+        const memberNameElement = document.getElementById('memberName');
+        const deleteForm = document.getElementById('deleteMemberForm');
+
+        deleteModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget; // Button that triggered the modal
+            const memberId = button.getAttribute('data-member-id');
+            const memberName = button.getAttribute('data-member-name');
+
+            // Set the member name in the modal
+            memberNameElement.textContent = memberName;
+
+            // Update the form's action dynamically
+            deleteForm.action = `/Members/Delete/${memberId}`;
+        });
+    });
+</script>

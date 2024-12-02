@@ -3,6 +3,7 @@ using LibraryManagementSystem.Models.DTOs;
 using LibraryManagementSystem.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -74,6 +75,23 @@ namespace LibraryManagementSystem.Controllers
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Books");
+        }
+
+        [HttpGet]
+        public IActionResult SearchBooks(string searchString)
+        {
+            if (searchString.IsNullOrEmpty())
+            {
+                return RedirectToAction("Index");
+            }
+
+            var books = _context.Books
+                .Where(b => b.Title.Contains(searchString) ||
+                            b.Author.Contains(searchString) ||
+                            b.Publisher.Contains(searchString))
+                .ToList();
+
+            return View("Index", books);
         }
     }
 }

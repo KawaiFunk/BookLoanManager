@@ -4,9 +4,14 @@
 }
 
 <h2>Registered Books</h2>
-<p>
+
+<div class="d-flex justify-content-between mb-3">
     <a type="button" class="btn btn-primary" asp-controller="Books" asp-action="RegisterBook">Register new book</a>
-</p>
+    <form asp-controller="Books" asp-action="SearchBooks" method="get" class="d-flex">
+        <input type="text" name="searchString" class="form-control me-2" placeholder="Search books..." />
+        <button type="submit" class="btn btn-outline-success">Search</button>
+    </form>
+</div>
 
 <table class="table table-hover">
     <thead>
@@ -16,12 +21,18 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Author)
-            </th scope="col">
+            </th>
             <th scope="col">
                 @Html.DisplayNameFor(model => model.Publisher)
             </th>
             <th scope="col">
                 @Html.DisplayNameFor(model => model.PublishYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAvailable)
             </th>
             <th></th>
         </tr>
@@ -41,6 +52,19 @@
                 </td>
                 <td>
                     @item.PublishYear.ToString("dd-MM-yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookID)
+                </td>
+                <td>
+                    @if (item.IsAvailable)
+                    {
+                        <span class="text-success">Available</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Not available</span>
+                    }
                 </td>
                 <td>
                     <a class="btn btn-warning" asp-controller="Books" asp-action="EditBook" asp-route-id="@item.BookID">Edit</a> |

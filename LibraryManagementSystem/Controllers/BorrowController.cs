@@ -65,7 +65,7 @@ namespace LibraryManagementSystem.Controllers
             //Check if book exists
             if (!_context.Books.Any(b => b.BookID == recordDTO.BookID))
             {
-                ModelState.AddModelError("BookID", "Book not found");
+                ModelState.AddModelError("BookID", "Book not available");
                 var record = new BorrowingRecord
                 {
                     MemberID = recordDTO.MemberID,
@@ -84,6 +84,8 @@ namespace LibraryManagementSystem.Controllers
                 IsReturned = false
             };
 
+            var book = await _context.Books.FindAsync(recordDTO.BookID);
+            book.IsAvailable = false;
             _context.BorrowingRecords.Add(newRecord);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Borrow", new { id = newRecord.MemberID });
@@ -93,7 +95,7 @@ namespace LibraryManagementSystem.Controllers
         public async Task<IActionResult> GetBookTitle(int bookId)
         {
             var book = await _context.Books.FirstOrDefaultAsync(b => b.BookID == bookId);
-            if (book == null)
+            if (book == null || !book.IsAvailable)
             {
                 return NotFound("Book not found.");
             }
@@ -111,8 +113,10 @@ namespace LibraryManagementSystem.Controllers
                 return NotFound();
             }
 
+            var book = await _context.Books.FindAsync(record.BookID);
+            book.IsAvailable = true;
             record.IsReturned = true;
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Borrow", new { id = record.MemberID });
         }
     }
