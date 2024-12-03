@@ -46,11 +46,10 @@ namespace LibraryManagementSystem.Controllers
                 return NotFound("Book not found");
             }
 
-            var record = new BorrowingRecord
+            var record = new BorrowingRecordDTO
             {
                 BookID = id,
-                Book = book,
-                BorrowDate = DateTime.Now
+                BookTitle = book.Title
             };
 
             return View(record);
@@ -61,22 +60,38 @@ namespace LibraryManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BorrowingRecordDTO record)
         {
+            var book = await _context.Books.FindAsync(record.BookID);
+
             if (!ModelState.IsValid)
             {
-                return View(record.BookID);
+                if (book != null)
+                {
+                    record.BookTitle = book.Title;
+                }
+                return View(record);
             }
 
             var member = await _context.Members.FindAsync(record.MemberID);
             if (member == null)
             {
-                ModelState.AddModelError("MemberID", "Member not found");
+                ModelState.AddModelError(nameof(record.MemberID), "Member not found");
+                if (book != null)
+                {
+                    record.BookTitle = book.Title;
+                }
+
                 return View(record);
             }
 
-            var book = await _context.Books.FindAsync(record.BookID);
             if (book == null || !book.IsAvailable)
             {
                 ModelState.AddModelError("BookID", "Book is not available");
+
+                if (book != null)
+                {
+                    record.BookTitle = book.Title;
+                }
+
                 return View(record);
             }
 

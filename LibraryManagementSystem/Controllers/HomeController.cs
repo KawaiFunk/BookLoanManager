@@ -3,6 +3,7 @@ using LibraryManagementSystem.Data;
 using LibraryManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -20,6 +21,21 @@ namespace LibraryManagementSystem.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Members.ToListAsync());
+        }
+
+        [HttpGet]
+        public IActionResult SearchMember(int searchString)
+        {
+            if (searchString == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var user = _context.Members
+                .Where(b => b.ID == searchString)
+                .ToList();
+
+            return View("Index", user);
         }
 
         public IActionResult Privacy()

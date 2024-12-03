@@ -1,22 +1,23 @@
-﻿@model LibraryManagementSystem.Models.Entities.BorrowingRecord
+﻿@model LibraryManagementSystem.Models.DTOs.BorrowingRecordDTO
 
 <h2>Create Borrowing Record</h2>
 
-<form asp-action="Create" method="post">
+<form asp-controller="Borrow" asp-action="Create" method="post">
     <input type="hidden" asp-for="BookID" value="@Model.BookID" />
-
-    <input type="hidden" asp-for="BorrowDate" value="@DateTime.Now" />
+    <input type="hidden" asp-for="BookTitle" value="@Model.BookTitle" />
 
     <div class="form-group">
         <label class="control-label">Book Title</label>
-        <input class="form-control" readonly value="@Model.Book.Title" />
+        <input class="form-control" readonly value="@Model.BookTitle" />
     </div>
 
     <div class="form-group">
         <label asp-for="MemberID" class="control-label">Member ID</label>
         <input asp-for="MemberID" class="form-control" placeholder="Enter Member ID" />
-        <span id="memberError" class="text-danger"></span>
+        <span asp-validation-for="MemberID" class="text-danger"></span>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     </div>
 
     <button type="submit" class="btn btn-primary">Create Borrowing Record</button>
 </form>
+

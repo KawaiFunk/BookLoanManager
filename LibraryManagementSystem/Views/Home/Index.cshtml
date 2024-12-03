@@ -4,13 +4,20 @@
 }
 
 <h2>Index page</h2>
-<p>
+<div class="d-flex justify-content-between mb-3">
     <a type="button" class="btn btn-primary" asp-controller="Members" asp-action="Create">Add new member</a>
-</p>
+    <form asp-controller="Home" asp-action="SearchMember" method="get" class="d-flex">
+        <input type="text" name="searchString" class="form-control me-2" placeholder="Search by ID..." />
+        <button type="submit" class="btn btn-outline-success">Search</button>
+    </form>
+</div>
 
 <table class="table table-hover">
     <thead>
         <tr class="table-active">
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
             <th scope="col">
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
@@ -27,6 +34,9 @@
         @foreach (var item in Model)
         {
             <tr class="table-light">
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
