@@ -19,6 +19,8 @@ namespace LibraryManagementSystem.Controllers
         public async Task<IActionResult> Index(int id)
         {
             ViewBag.MemberID = id;
+            var user = await _context.Members.FindAsync(id);
+            ViewBag.Name = (user.FirstName + " " + user.LastName).ToString();
             var records = await _context.BorrowingRecords
                 .Include(r => r.Book)
                 .Where(r => r.MemberID == id)
