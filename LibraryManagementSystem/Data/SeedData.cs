@@ -8,6 +8,12 @@ namespace LibraryManagementSystem.Data
     {
         public static async Task SeedDatabase(LibraryContext context)
         {
+            if (context.Members.Any() || context.Books.Any())
+            {
+                Console.WriteLine("Database already seeded.");
+                return;
+            }
+
             try
             {
 
