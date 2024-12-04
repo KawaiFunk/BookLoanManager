@@ -12,7 +12,6 @@
         <button type="submit" class="btn btn-outline-success">Search</button>
     </form>
 </div>
-
 <table class="table table-hover">
     <thead>
         <tr class="table-active">
@@ -66,18 +65,18 @@
                         <span class="text-danger">Not available</span>
                     }
                 </td>
-                <td>
-                    <a class="btn btn-warning" asp-controller="Books" asp-action="EditBook" asp-route-id="@item.BookID">Edit</a> |
+                <td class="d-flex">
+                    <a class="btn btn-warning btn-sm me-1" asp-controller="Books" asp-action="EditBook" asp-route-id="@item.BookID">Edit</a> |
                     <form asp-controller="Books" asp-action="DeleteBook" asp-route-id="@item.BookID" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger btn-sm me-1">Delete</button>
                     </form> |
                     @if (item.IsAvailable)
                     {
-                        <a class="btn btn-primary" asp-controller="Borrow" asp-action="Create" asp-route-id="@item.BookID">Assign Book</a>
+                        <a class="btn btn-primary btn-sm" asp-controller="Borrow" asp-action="Create" asp-route-id="@item.BookID">Assign Book</a>
                     }
                     else
                     {
-                        <a type="button" class="btn btn-primary disabled">Assign Book</a>
+                        <a type="button" class="btn btn-primary btn-sm disabled">Assign Book</a>
                     }
                 </td>
             </tr>
